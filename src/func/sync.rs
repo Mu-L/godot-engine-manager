@@ -11,9 +11,6 @@ pub async fn sync_data(cfg: &Config) {
     pb.set_message("Syncing data...");
 
     let file_path = cfg.data.join("releases.json");
-    if file_path.exists() {
-        return;
-    }
     let client = build_client(Some(cfg.proxy.as_str())).unwrap();
     let resp = client.get(URL).send().await.unwrap();
     // json

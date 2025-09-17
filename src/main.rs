@@ -7,7 +7,7 @@ use gdem::func::{config, install, list, remove, switch, sync};
 #[derive(Parser)]
 #[clap(
     name = "gdem",
-    version = "1.3.0",
+    version = "1.3.1",
     about = "Godot Engine Manager is a Godot Engine version management tool developed based on the GodotHub.",
     after_help = "Before using, please first sync the data with `gdem sync`."
 )]
