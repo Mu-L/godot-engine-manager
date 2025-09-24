@@ -283,9 +283,17 @@ pub fn symlink(original: &Path, link: &Path) -> Result<(), Box<dyn std::error::E
     }
 
     #[cfg(unix)]
-    std::os::unix::fs::symlink(original, link)?;
+    {
+        std::os::unix::fs::symlink(original, link)?;
+    }
     #[cfg(windows)]
-    std::os::windows::fs::symlink_dir(original, link)?;
+    {
+        if original.is_dir() {
+            std::os::windows::fs::symlink_dir(original, link)?;
+        } else {
+            std::os::windows::fs::symlink_file(original, link)?;
+        }
+    }
     Ok(())
 }
 
