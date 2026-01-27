@@ -1,6 +1,5 @@
 use clap::{Parser, Subcommand};
 use gdem::core::config::ConfigTrait;
-use gdem::core::source::Source;
 use gdem::core::style;
 use gdem::func::{config, install, list, remove, switch, sync};
 
@@ -21,9 +20,6 @@ enum Commands {
     /// Configure the Godot Engine Manager.
     #[clap(name = "config", alias = "cfg")]
     Config {
-        /// The source to use.
-        #[clap(short, long)]
-        source: Option<String>,
         /// The proxy to use.
         #[clap(short, long)]
         proxy: Option<String>,
@@ -74,11 +70,8 @@ enum Commands {
 async fn main() {
     let cli = Cli::parse();
     match cli.command {
-        Commands::Config { source, proxy } => {
+        Commands::Config { proxy } => {
             let mut cfg = config::Config::init();
-            if let Some(source) = source {
-                cfg.source = Source::from_str(source.as_str());
-            }
             if let Some(proxy) = proxy {
                 cfg.proxy = proxy;
             }

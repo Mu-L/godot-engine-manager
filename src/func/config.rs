@@ -1,5 +1,4 @@
 use crate::core::config::ConfigTrait;
-use crate::core::source::Source;
 use crate::core::utils::{load_json, save_json, symlink};
 use serde::{Deserialize, Serialize};
 use std::env;
@@ -15,7 +14,6 @@ pub struct Config {
     pub data: PathBuf,
     pub proxy: String,
     pub version: String,
-    pub source: Source,
 }
 impl ConfigTrait for Config {
     fn init() -> Self {
@@ -41,7 +39,6 @@ impl ConfigTrait for Config {
             data,
             proxy: "".to_string(),
             version: "".to_string(),
-            source: Source::GodotHub,
         }
     }
 
@@ -65,8 +62,6 @@ impl ConfigTrait for Config {
         let data = Self::val2path(config.get("data"));
         let proxy = Self::val2str(config.get("proxy"));
         let version = Self::val2str(config.get("version"));
-        let source = Self::val2str(config.get("source"));
-        let source = Source::from_str(source.as_str());
         Self {
             root,
             home,
@@ -74,7 +69,6 @@ impl ConfigTrait for Config {
             data,
             proxy,
             version,
-            source: source,
         }
     }
     fn init_path(&self) {

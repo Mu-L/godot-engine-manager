@@ -1,4 +1,3 @@
-use crate::core::source::format_url;
 use crate::core::style::new_spinner;
 use crate::core::utils::{download_file, extract_zip, sha512sum};
 use crate::func::config::Config;
@@ -49,8 +48,6 @@ async fn get_remote_sha512(
 ) -> Result<String, Box<dyn Error>> {
     let cache_dir = get_levels_dir(&cfg.cache, file_name);
     let sum_url = query_sum_file_url(file_name, &cfg.data).unwrap();
-    let source = cfg.source.clone();
-    let sum_url = format_url(sum_url.as_str(), Some(source));
     // sum_file_path
     let sum_file_path = cache_dir.join("SHA512-SUMS.txt");
     // 如果sum_file_path 不存在
@@ -95,8 +92,6 @@ async fn install_engine(file_name: &str, cfg: &Config) -> Result<String, Box<dyn
 
     // 获取下载链接
     let url = query_url(file_name, &cfg.data).unwrap();
-    let source = cfg.source.clone();
-    let url = format_url(url.as_str(), Some(source));
     // 下载路径
     let proxy_url = if cfg.proxy.is_empty() {
         None

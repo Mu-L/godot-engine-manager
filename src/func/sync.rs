@@ -4,7 +4,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 use serde_json::Value;
 
 pub async fn sync_data(cfg: &Config) {
-    const URL: &str = "https://godothub.atomgit.net/web/api/releases.json";
+    const URL: &str = "https://api.github.com/repos/godotengine/godot/releases/279936812";
     let pb = ProgressBar::new_spinner();
     pb.set_style(ProgressStyle::default_spinner());
     pb.enable_steady_tick(std::time::Duration::from_millis(80));
