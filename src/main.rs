@@ -112,9 +112,7 @@ async fn main() {
             skip_check,
         } => {
             let cfg = config::Config::init();
-            match install::full_install_process(&engine, &cfg, force, skip_check)
-                .await
-            {
+            match install::full_install_process(&engine, &cfg, force, skip_check).await {
                 Ok(engine) => {
                     println!("Install success: {}", engine);
                 }
