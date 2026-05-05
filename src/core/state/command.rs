@@ -1,4 +1,5 @@
 use super::engine_id::StandardEngineId;
+use crate::func::config::Config;
 
 /// 列表范围
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -49,7 +50,12 @@ pub enum StandardCommand {
 #[derive(Debug, Clone)]
 pub enum ExecutionResult {
     /// 引擎列表
-    EngineList(Vec<StandardEngineId>),
+    EngineList {
+        engines: Vec<StandardEngineId>,
+        scope: ListScope,
+        current: Option<StandardEngineId>,
+        config: Config,
+    },
     /// 安装成功
     Installed(StandardEngineId),
     /// 切换成功
@@ -66,9 +72,32 @@ impl ExecutionResult {
     /// 显示结果
     pub fn display(&self) {
         match self {
-            ExecutionResult::EngineList(engines) => {
-                for engine in engines {
-                    println!("{}", engine);
+            ExecutionResult::EngineList {
+                engines,
+                scope,
+                current,
+                config: _config,
+            } => {
+                let engine_strings: Vec<String> = engines.iter().map(|e| e.to_string()).collect();
+                let current_str = current.as_ref().map(|e| e.to_string()).unwrap_or_default();
+
+                match scope {
+                    ListScope::Local => {
+                        let table = crate::core::style::show_tree(
+                            &engine_strings,
+                            &current_str,
+                            "本地引擎",
+                        );
+                        println!("{}", table);
+                    }
+                    ListScope::Remote => {
+                        let table = crate::core::style::show_list(&engine_strings, "远程引擎");
+                        println!("{}", table);
+                    }
+                    ListScope::Assets => {
+                        let table = crate::core::style::show_list(&engine_strings, "引擎资产");
+                        println!("{}", table);
+                    }
                 }
             }
             ExecutionResult::Installed(engine) => {

@@ -59,7 +59,7 @@ impl StandardEngineId {
             .ok_or_else(|| ParseError::InvalidFormat(input.to_string()))
     }
 
-    /// 从完整文件名解析（如 "Godot_v4.4.1-stable_win64.exe.zip"）
+    /// 从完整文件名或目录名解析（如 "Godot_v4.4.1-stable_win64.exe.zip" 或 "Godot_v4.4.1-stable_win64"）
     fn from_full_name(input: &str) -> Option<Self> {
         // 移除扩展名
         let name = input
@@ -70,8 +70,8 @@ impl StandardEngineId {
         // 检查是否是导出模板
         let is_export_template = name.contains("export_templates");
 
-        // 解析版本号
-        let re = Regex::new(r"v(\d+)\.(\d+)(?:\.(\d+))?(?:-([a-z]+))?").ok()?;
+        // 解析版本号 - 支持带 v 或不带 v 的格式
+        let re = Regex::new(r"(?:v)?(\d+)\.(\d+)(?:\.(\d+))?(?:-([a-z]+))?").ok()?;
         let captures = re.captures(&name)?;
 
         let major = captures.get(1)?.as_str().parse().ok()?;
